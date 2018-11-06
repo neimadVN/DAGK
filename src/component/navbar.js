@@ -1,7 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import firebase, { provider } from '../firebase-config';
-console.log(firebase);
+import { provider } from '../firebase-config';
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { firebaseConnect, isLoaded, isEmpty } from "react-redux-firebase";
+import db from '../model/model';
 
 class NavBar extends Component {
     constructor(props) {
@@ -12,34 +15,36 @@ class NavBar extends Component {
     }
 
     componentDidMount() {
-        firebase.auth().onAuthStateChanged(user => {
-            if (user) {
-                this.setState({
-                    user: user
-                });
-            }
+        this.props.firebase.auth().onAuthStateChanged(user => {
+            // if (user) {
+            //     this.setState({
+            //         user: user
+            //     });
+            // }
         });
     }
 
     signIn = () => {
-        firebase.auth().signInWithPopup(provider).then((result) => {
+        this.props.firebase.auth().signInWithPopup(provider).then((result) => {
+            // const user = result.user;
+            // this.setState({
+            //     user: user
+            // })
             const user = result.user;
-            this.setState({
-                user: user
-            })
+            db.updateUserInfo(user);
         });
     };
 
     signOut = () => {
-        firebase.auth().signOut().then(() => {
-            this.setState({
-                user: null
-            });
+        this.props.firebase.auth().signOut().then(() => {
+            // this.setState({
+            //     user: null
+            // });
         });
     }
 
     getSignButton = () => {
-        if (this.state.user) {
+        if (this.props.auth.uid) {
             return (
                 <li onClick={this.signOut}><a href='#!'>Sign Out</a></li>
             )
@@ -51,7 +56,7 @@ class NavBar extends Component {
     }
 
     getuser = () => {
-        if (!this.state.user) {
+        if (!this.props.auth.uid) {
             return (
                 null
             )
@@ -59,10 +64,10 @@ class NavBar extends Component {
             return (
                 <li>
                     <a href='#!' style={{ height: "64px", objectFit: "contain" }}>
-                        <img style={avatar} src={this.state.user.photoURL} />
+                        <img style={avatar} src={this.props.auth.photoURL} />
                         <div style={{ display: "inline", position: "relative" }}>
-                            <span style={{ position: "absolute", top: "-49px", width: "100%" }}>{this.state.user.displayName}</span>
-                            <span style={{ visibility: "hidden" }}>{this.state.user.displayName}</span>
+                            <span style={{ position: "absolute", top: "-49px", width: "100%" }}>{this.props.auth.displayName}</span>
+                            <span style={{ visibility: "hidden" }}>{this.props.auth.displayName}</span>
                         </div>
                     </a>
                 </li>
@@ -110,4 +115,6 @@ const avatar = {
     overflow: "auto"
 }
 
-export default NavBar;
+//export default NavBar;
+export default compose(firebaseConnect(), // withFirebase can also be used
+    connect(({ firebase: { auth } }) => ({ auth })))(NavBar);

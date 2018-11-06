@@ -4,7 +4,11 @@ import { connect } from "react-redux";
 
 import broswerHistory from "../routes/history";
 
-class LoginPage extends Component {
+// var __html = require('./basehtml/index2');
+// var template = { __html: __html };
+import UserList from "./UserList";
+
+class ChatPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,21 +17,20 @@ class LoginPage extends Component {
     }
 
     componentWillReceiveProps({ auth }) {
-      if (auth && auth.uid) {
-        broswerHistory.replace('/chatPage');
-      }
+        if (!auth || !auth.uid) {
+          broswerHistory.replace('/login');
+        }
     }
 
     render() {
 
         return (
-            <div>
-
-            </div>
+            <UserList />
+            // <div dangerouslySetInnerHTML={template} />
         )
     }
 }
 
 export default connect(({ firebase: { auth } }) => ({
-  auth: auth
-}))(LoginPage);
+    auth: auth
+  }))(ChatPage);
