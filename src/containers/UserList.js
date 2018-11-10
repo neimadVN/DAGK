@@ -5,18 +5,23 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import UserSection from "./User";
 
-const UserList = ({ firebase, users, presence, sessions }) => {
-  console.log(users);
+const UserList = ({ firebase, users, presence, sessions, chooseConversation }) => {
   let userList = [];
-
+  
   for (var key in users) {
+    const Conversation = (param) => {
+      chooseConversation(param);
+    };
+
     if (users.hasOwnProperty(key)) {
       const index = (
         <UserSection
           photoURL={users[key].photoURL}
           displayName={users[key].displayName}
           status={"online"}
-          key={users[key].uid}
+          uid={key}
+          key={key}
+          chooseConversation={Conversation}
         />
       );
       userList.push(index);

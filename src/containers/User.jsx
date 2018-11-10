@@ -24,8 +24,16 @@ class User extends React.Component {
   //   history.replace(`/chat/${this.props.auth.uid}/${this.props.id}`);
   // }
   render() {
+    const chooseConversation = () => {
+      const value = {
+        displayName: this.props.displayName,
+        photoURL: this.props.photoURL,
+        uid: this.props.uid
+      }
+      this.props.chooseConversation(value);
+    };
     return (
-      <li className="clearfix">
+      <li className="clearfix" style={{cursor: 'pointer'}} onClick={chooseConversation}>
         <img
           src={this.props.photoURL}
           alt="user_avatar"

@@ -9,6 +9,19 @@ db.updateUserInfo = (userInfo) => {
         displayName: userInfo.displayName,
         uid: userInfo.uid
     });
-}
+};
+
+db.pushMessege = (msg, conversation, ) => {
+    if (msg && msg != '') {
+
+        database.push(
+            this.props.conversation,
+            {
+                content: this.state.content,
+                chatTime: new Date(),
+            }
+        );
+    }
+};
 
 export default db;
