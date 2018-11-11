@@ -78,7 +78,7 @@ class NavBar extends Component {
     render() {
 
         return (
-            <div>
+            <div style={{textAlign: "center", lineHeight: "64px"}}>
                 <nav style={backgroundGrad}>
                     <div className="nav-wrapper">
                         <a href="#!" className="brand-logo">Chato</a>

@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
+import isImg from 'is-image-url';
 
 const MessegeList = props => {
   let msgLst = [];
   if (props.list) {
     for (var key in props.list) {
       if (props.list.hasOwnProperty(key)) {
+        let msgContent = [];
+        if (isImg(props.list[key].content)) {
+          msgContent.push(<a href={props.list[key].content}>{props.list[key].content}</a>)
+          msgContent.push(<img src={props.list[key].content} alt="err" style={imgStyle} onError="this.style.display='none'"/>);
+        } else {
+          msgContent.push(props.list[key].content);
+        }
+
         const index = props.list[key].sender == props.me.uid ?
           (
             <li class="clearfix">
@@ -14,7 +23,7 @@ const MessegeList = props => {
                 <i class="fa fa-circle me"></i>
               </div>
               <div class="message other-message float-right">
-                {props.list[key].content}
+                {msgContent}
             </div>
             </li>
           ) :
@@ -25,7 +34,7 @@ const MessegeList = props => {
                 <span class="message-data-time"></span>
               </div>
               <div class="message my-message">
-                {props.list[key].content}
+                {msgContent}
             </div>
             </li>
           )
@@ -41,5 +50,9 @@ const MessegeList = props => {
     </ul>
   )
 }
+
+const imgStyle = {
+  maxWidth: "100%"
+};
 
 export default MessegeList;

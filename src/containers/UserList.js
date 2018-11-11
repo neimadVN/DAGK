@@ -7,6 +7,7 @@ import UserSection from "./User";
 
 const UserList = ({ firebase, users, presence, sessions, chooseConversation }) => {
   let userList = [];
+  console.log(presence);
   
   for (var key in users) {
     const Conversation = (param) => {
@@ -18,7 +19,7 @@ const UserList = ({ firebase, users, presence, sessions, chooseConversation }) =
         <UserSection
           photoURL={users[key].photoURL}
           displayName={users[key].displayName}
-          status={"online"}
+          status={(presence && presence[key] && presence[key] == true )? "online" : "offline"}
           uid={key}
           key={key}
           chooseConversation={Conversation}

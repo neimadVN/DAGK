@@ -18,7 +18,7 @@ const enhance = compose(
         messages: getVal(
             firebase,
             'data/conversation/' + props.conversation
-        ), // lodash's get can also be used
+        ),
         auth: firebase.auth,
         conversation: props.conversation,
         parterinfo: props.parterinfo
@@ -36,6 +36,12 @@ class ChatBox extends React.Component {
 
     inputText = (event) => {
         this.setState({ composingMsg: event.target.value });
+    }
+
+    buttonDown = (event) => {
+        if (event.keyCode == 13) {
+            this.submitMessage();   
+        }
     }
 
     submitMessage = () => {
@@ -72,10 +78,12 @@ class ChatBox extends React.Component {
                     </div>
 
                     <div className="chat-message clearfix">
-                        <textarea onChange={event => this.inputText(event)} value={this.state.composingMsg} name="message-to-send" id="message-to-send" placeholder="Type your message" rows="3"></textarea>
+                        <textarea onKeyDown={event => this.buttonDown(event)} onChange={event => this.inputText(event)} value={this.state.composingMsg} name="message-to-send" id="message-to-send" placeholder="Type your message" rows="3"></textarea>
 
-                        <i className="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
-                    <i className="fa fa-file-image-o"></i>
+                    <i className="fa fa-file-o"></i> &nbsp;&nbsp;&nbsp;
+                    <i className="fa fa-file-image-o">
+                    
+                    </i>
 
                         <button onClick={this.submitMessage}>Send</button>
 
