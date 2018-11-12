@@ -1,4 +1,5 @@
 import { database } from '../firebase-config';
+import { storage } from '../firebase-config';
 
 var db = {};
 
